@@ -1,0 +1,153 @@
+# POI 类别字典 — 年轻租客视角
+#
+# 设计原则（v2，2026-05 优化）：
+#   primary_keywords:  类别的代表性搜索词（"超市"、"购物中心"），用来调 API
+#                      数量少（1-3 个），强 expected_tags 过滤，配额省 10x
+#   brand_keywords:    具体品牌名清单，仅用于：
+#                      (a) 用户指定 must_have_brand 时过滤
+#                      (b) 在 POI name 里识别后标记 matched_brand 用于报告显示
+#                      不调 API，不消耗配额
+#   expected_tags:     百度/高德 POI 的 tag 或 type 必须含其中之一才算命中
+#                      避免「山姆大叔少儿英语」这种 false positive
+
+shopping:
+  description: 购物与日常采买
+  subcategories:
+    big_supermarket:
+      label: 大型超市
+      primary_keywords: [超市]
+      brand_keywords: [山姆, Costco, 沃尔玛, 永辉, "Ole'", "OLE", 华润万家, 盒马, 麦德龙, 家乐福]
+      expected_tags: [超市, 仓储会员店, 大卖场, 量贩店]
+      default_radius_m: 3000
+    convenience_store:
+      label: 便利店
+      primary_keywords: [便利店]
+      brand_keywords: [7-11, 全家, 罗森, 便利蜂, 美宜佳, 711, 7-Eleven]
+      expected_tags: [便利店]
+      default_radius_m: 500
+    shopping_mall:
+      label: 购物中心
+      primary_keywords: [购物中心, 商场]
+      brand_keywords: [万象城, 万达广场, 万象汇, 龙湖天街, 印象城, 来福士, 合生汇, SKP, 太古汇, 大悦城, 万象天地, 海岸城, 益田假日]
+      expected_tags: [购物中心, 商场, 综合商场, 商城, 广场]
+      default_radius_m: 3000
+
+entertainment:
+  description: 娱乐与休闲
+  subcategories:
+    cinema:
+      label: 电影院
+      primary_keywords: [电影院]
+      brand_keywords: [IMAX, CGV, 万达影城, 博纳影城, 卢米埃, 百老汇影城, 中影]
+      expected_tags: [电影院, 影城, 影院]
+      default_radius_m: 5000
+    gym:
+      label: 健身房
+      primary_keywords: [健身房]
+      brand_keywords: [乐刻, 超级猩猩, Keep, 一兆韦德, 威尔士, 中田健身]
+      expected_tags: [健身房, 健身中心, 体育健身]
+      default_radius_m: 2000
+    yoga_studio:
+      label: 瑜伽馆
+      primary_keywords: [瑜伽馆]
+      brand_keywords: [普拉提]
+      expected_tags: [瑜伽, 健身, 体育]
+      default_radius_m: 2000
+    bar:
+      label: 酒吧/Live House/夜生活
+      primary_keywords: [酒吧, livehouse]
+      brand_keywords: [精酿, Live House, 清吧, 酒馆]
+      expected_tags: [酒吧, 夜店, 夜生活]
+      default_radius_m: 5000
+    ktv:
+      label: KTV
+      primary_keywords: [KTV]
+      brand_keywords: [量贩KTV, 唱吧麦颂]
+      expected_tags: [KTV, 量贩]
+      default_radius_m: 5000
+    escape_room:
+      label: 剧本杀/密室
+      primary_keywords: [剧本杀, 密室]
+      brand_keywords: [密室逃脱]
+      expected_tags: [剧本杀, 密室, 娱乐]
+      default_radius_m: 5000
+
+dining:
+  description: 餐饮（含外卖友好度）
+  subcategories:
+    chain_restaurant:
+      label: 连锁餐饮
+      primary_keywords: [连锁餐饮, 快餐]
+      brand_keywords: [海底捞, 太二, 西贝, 外婆家, 绿茶, 喜茶, 奈雪, 星巴克, Manner, 瑞幸, 麦当劳, 肯德基]
+      expected_tags: [餐饮, 美食, 中餐, 西餐, 快餐, 火锅, 饮品, 咖啡]
+      default_radius_m: 1000
+    food_street:
+      label: 美食街/食街
+      primary_keywords: [美食街]
+      brand_keywords: [食街, 小吃街]
+      expected_tags: [美食街, 餐饮]
+      default_radius_m: 1500
+
+nature:
+  description: 自然与户外
+  subcategories:
+    park:
+      label: 公园/绿地
+      primary_keywords: [公园]
+      brand_keywords: [湿地公园, 滨海公园, 绿道, 河滨公园, 城市公园, 森林公园]
+      expected_tags: [公园, 风景, 旅游, 自然]
+      default_radius_m: 2000
+
+transport:
+  description: 通勤与出行
+  subcategories:
+    subway:
+      label: 地铁站
+      primary_keywords: [地铁站]
+      brand_keywords: [轨道交通]
+      expected_tags: [地铁, 轨道交通]
+      default_radius_m: 1000
+    bus_stop:
+      label: 公交站
+      primary_keywords: [公交站]
+      brand_keywords: []
+      expected_tags: [公交, 巴士]
+      default_radius_m: 500
+
+medical:
+  description: 医疗
+  subcategories:
+    hospital:
+      label: 医院
+      primary_keywords: [医院]
+      brand_keywords: [三甲医院, 综合医院]
+      expected_tags: [医院, 医疗保健, 诊所]
+      default_radius_m: 5000
+    pharmacy:
+      label: 药店
+      primary_keywords: [药店]
+      brand_keywords: [大参林, 海王星辰, 屈臣氏, 万宁]
+      expected_tags: [药店, 药房, 医药]
+      default_radius_m: 1000
+
+life_service:
+  description: 生活服务
+  subcategories:
+    pet_hospital:
+      label: 宠物医院
+      primary_keywords: [宠物医院]
+      brand_keywords: [宠物诊所]
+      expected_tags: [宠物, 兽医]
+      default_radius_m: 3000
+    salon:
+      label: 美容美发
+      primary_keywords: [美发, 美容]
+      brand_keywords: [美甲, 理发]
+      expected_tags: [美发, 美容, 美甲, 生活服务]
+      default_radius_m: 1000
+    bank:
+      label: 银行
+      primary_keywords: [银行]
+      brand_keywords: [工商银行, 招商银行, 建设银行, 农业银行, 中国银行]
+      expected_tags: [银行, 金融]
+      default_radius_m: 3000

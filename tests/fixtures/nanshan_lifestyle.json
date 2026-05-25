@@ -1,0 +1,20 @@
+{
+  "intent": "research",
+  "city": "深圳市",
+  "district": "南山区",
+  "area": "科技园",
+  "lifestyle_profile": ["commuter", "shopping_lover"],
+  "must_have_pois": [
+    {"category": "transport.subway", "min_count": 1, "radius_m": 1000},
+    {"category": "shopping.shopping_mall", "min_count": 1, "radius_m": 3000}
+  ],
+  "nice_to_have_pois": [
+    {"category": "shopping.big_supermarket", "min_count": 1, "radius_m": 3000},
+    {"category": "entertainment.cinema", "min_count": 1, "radius_m": 5000},
+    {"category": "entertainment.gym", "min_count": 1, "radius_m": 2000},
+    {"category": "nature.park", "min_count": 1, "radius_m": 2000},
+    {"category": "dining.chain_restaurant", "min_count": 5, "radius_m": 1000}
+  ],
+  "top_n": 8,
+  "raw": "我想了解下深圳南山区科技园周边适合年轻人租房的小区"
+}

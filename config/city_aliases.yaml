@@ -1,0 +1,236 @@
+# 城市/区域名标准化
+# 覆盖中国大陆主要地级市（~80 个，覆盖年轻租客 95%+ 实际使用场景）
+# 不在此白名单的城市仍然可用 —— 会降级到「百度地图搜小区」模式（候选数会少一些）
+
+cities:
+  # ---------- 直辖市 / 一线 ----------
+  北京: 北京市
+  北京市: 北京市
+  beijing: 北京市
+  上海: 上海市
+  上海市: 上海市
+  shanghai: 上海市
+  广州: 广州市
+  广州市: 广州市
+  guangzhou: 广州市
+  深圳: 深圳市
+  深圳市: 深圳市
+  shenzhen: 深圳市
+  天津: 天津市
+  天津市: 天津市
+  tianjin: 天津市
+  重庆: 重庆市
+  重庆市: 重庆市
+  chongqing: 重庆市
+
+  # ---------- 新一线 ----------
+  杭州: 杭州市
+  hangzhou: 杭州市
+  成都: 成都市
+  chengdu: 成都市
+  武汉: 武汉市
+  wuhan: 武汉市
+  南京: 南京市
+  nanjing: 南京市
+  苏州: 苏州市
+  suzhou: 苏州市
+  西安: 西安市
+  xian: 西安市
+  长沙: 长沙市
+  changsha: 长沙市
+  郑州: 郑州市
+  zhengzhou: 郑州市
+  青岛: 青岛市
+  qingdao: 青岛市
+  沈阳: 沈阳市
+  shenyang: 沈阳市
+  宁波: 宁波市
+  ningbo: 宁波市
+  东莞: 东莞市
+  dongguan: 东莞市
+  无锡: 无锡市
+  wuxi: 无锡市
+  合肥: 合肥市
+  hefei: 合肥市
+  佛山: 佛山市
+  foshan: 佛山市
+
+  # ---------- 二线 ----------
+  福州: 福州市
+  fuzhou: 福州市
+  厦门: 厦门市
+  xiamen: 厦门市
+  哈尔滨: 哈尔滨市
+  haerbin: 哈尔滨市
+  长春: 长春市
+  changchun: 长春市
+  大连: 大连市
+  dalian: 大连市
+  济南: 济南市
+  jinan: 济南市
+  昆明: 昆明市
+  kunming: 昆明市
+  贵阳: 贵阳市
+  guiyang: 贵阳市
+  南宁: 南宁市
+  nanning: 南宁市
+  南昌: 南昌市
+  nanchang: 南昌市
+  太原: 太原市
+  taiyuan: 太原市
+  石家庄: 石家庄市
+  shijiazhuang: 石家庄市
+  乌鲁木齐: 乌鲁木齐市
+  wulumuqi: 乌鲁木齐市
+  兰州: 兰州市
+  lanzhou: 兰州市
+  呼和浩特: 呼和浩特市
+  hohhot: 呼和浩特市
+  银川: 银川市
+  yinchuan: 银川市
+  西宁: 西宁市
+  xining: 西宁市
+  海口: 海口市
+  haikou: 海口市
+  三亚: 三亚市
+  sanya: 三亚市
+  拉萨: 拉萨市
+  lasa: 拉萨市
+
+  # ---------- 珠三角 / 长三角 / 京津冀 强地级市 ----------
+  珠海: 珠海市
+  zhuhai: 珠海市
+  中山: 中山市
+  zhongshan: 中山市
+  惠州: 惠州市
+  huizhou: 惠州市
+  江门: 江门市
+  jiangmen: 江门市
+  汕头: 汕头市
+  shantou: 汕头市
+  湛江: 湛江市
+  zhanjiang: 湛江市
+  常州: 常州市
+  changzhou: 常州市
+  南通: 南通市
+  nantong: 南通市
+  徐州: 徐州市
+  xuzhou: 徐州市
+  扬州: 扬州市
+  yangzhou: 扬州市
+  温州: 温州市
+  wenzhou: 温州市
+  绍兴: 绍兴市
+  shaoxing: 绍兴市
+  嘉兴: 嘉兴市
+  jiaxing: 嘉兴市
+  金华: 金华市
+  jinhua: 金华市
+  泉州: 泉州市
+  quanzhou: 泉州市
+  烟台: 烟台市
+  yantai: 烟台市
+  唐山: 唐山市
+  tangshan: 唐山市
+  保定: 保定市
+  baoding: 保定市
+  廊坊: 廊坊市
+  langfang: 廊坊市
+  秦皇岛: 秦皇岛市
+  qinhuangdao: 秦皇岛市
+
+# ---------- 区/板块缩写 → 全称 ----------
+districts:
+  # 北京
+  朝阳: { city: 北京市, district: 朝阳区 }
+  海淀: { city: 北京市, district: 海淀区 }
+  东城: { city: 北京市, district: 东城区 }
+  西城: { city: 北京市, district: 西城区 }
+  丰台: { city: 北京市, district: 丰台区 }
+  通州: { city: 北京市, district: 通州区 }
+  昌平: { city: 北京市, district: 昌平区 }
+  大兴: { city: 北京市, district: 大兴区 }
+  望京: { city: 北京市, district: 朝阳区, area: 望京 }
+  国贸: { city: 北京市, district: 朝阳区, area: 国贸 }
+  五道口: { city: 北京市, district: 海淀区, area: 五道口 }
+  中关村: { city: 北京市, district: 海淀区, area: 中关村 }
+
+  # 上海
+  浦东: { city: 上海市, district: 浦东新区 }
+  浦东新区: { city: 上海市, district: 浦东新区 }
+  徐汇: { city: 上海市, district: 徐汇区 }
+  静安: { city: 上海市, district: 静安区 }
+  长宁: { city: 上海市, district: 长宁区 }
+  虹口: { city: 上海市, district: 虹口区 }
+  普陀: { city: 上海市, district: 普陀区 }
+  黄浦: { city: 上海市, district: 黄浦区 }
+  杨浦: { city: 上海市, district: 杨浦区 }
+  闵行: { city: 上海市, district: 闵行区 }
+  宝山: { city: 上海市, district: 宝山区 }
+  嘉定: { city: 上海市, district: 嘉定区 }
+  松江: { city: 上海市, district: 松江区 }
+  陆家嘴: { city: 上海市, district: 浦东新区, area: 陆家嘴 }
+  张江: { city: 上海市, district: 浦东新区, area: 张江 }
+  漕河泾: { city: 上海市, district: 徐汇区, area: 漕河泾 }
+
+  # 深圳
+  南山: { city: 深圳市, district: 南山区 }
+  南山区: { city: 深圳市, district: 南山区 }
+  福田: { city: 深圳市, district: 福田区 }
+  福田区: { city: 深圳市, district: 福田区 }
+  罗湖: { city: 深圳市, district: 罗湖区 }
+  罗湖区: { city: 深圳市, district: 罗湖区 }
+  宝安: { city: 深圳市, district: 宝安区 }
+  宝安区: { city: 深圳市, district: 宝安区 }
+  龙岗: { city: 深圳市, district: 龙岗区 }
+  龙岗区: { city: 深圳市, district: 龙岗区 }
+  龙华: { city: 深圳市, district: 龙华区 }
+  龙华区: { city: 深圳市, district: 龙华区 }
+  坪山: { city: 深圳市, district: 坪山区 }
+  坪山区: { city: 深圳市, district: 坪山区 }
+  光明: { city: 深圳市, district: 光明区 }
+  光明区: { city: 深圳市, district: 光明区 }
+  盐田: { city: 深圳市, district: 盐田区 }
+  大鹏: { city: 深圳市, district: 大鹏新区 }
+  科技园: { city: 深圳市, district: 南山区, area: 科技园 }
+  后海: { city: 深圳市, district: 南山区, area: 后海 }
+  蛇口: { city: 深圳市, district: 南山区, area: 蛇口 }
+  车公庙: { city: 深圳市, district: 福田区, area: 车公庙 }
+  华强北: { city: 深圳市, district: 福田区, area: 华强北 }
+
+  # 广州
+  天河: { city: 广州市, district: 天河区 }
+  天河区: { city: 广州市, district: 天河区 }
+  越秀: { city: 广州市, district: 越秀区 }
+  海珠: { city: 广州市, district: 海珠区 }
+  荔湾: { city: 广州市, district: 荔湾区 }
+  白云: { city: 广州市, district: 白云区 }
+  番禺: { city: 广州市, district: 番禺区 }
+  花都: { city: 广州市, district: 花都区 }
+  黄埔: { city: 广州市, district: 黄埔区 }
+  珠江新城: { city: 广州市, district: 天河区, area: 珠江新城 }
+
+  # 杭州
+  西湖: { city: 杭州市, district: 西湖区 }
+  滨江: { city: 杭州市, district: 滨江区 }
+  上城: { city: 杭州市, district: 上城区 }
+  拱墅: { city: 杭州市, district: 拱墅区 }
+  余杭: { city: 杭州市, district: 余杭区 }
+  萧山: { city: 杭州市, district: 萧山区 }
+  钱塘: { city: 杭州市, district: 钱塘区 }
+  未来科技城: { city: 杭州市, district: 余杭区, area: 未来科技城 }
+
+  # 成都
+  锦江: { city: 成都市, district: 锦江区 }
+  青羊: { city: 成都市, district: 青羊区 }
+  武侯: { city: 成都市, district: 武侯区 }
+  高新: { city: 成都市, district: 高新区 }
+  天府新区: { city: 成都市, district: 天府新区 }
+
+  # 中山
+  东区: { city: 中山市, district: 东区 }
+  石岐: { city: 中山市, district: 石岐区 }
+  石岐区: { city: 中山市, district: 石岐区 }
+  西区: { city: 中山市, district: 西区 }
+  南区: { city: 中山市, district: 南区 }
+  火炬开发区: { city: 中山市, district: 火炬开发区 }

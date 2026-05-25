@@ -1,0 +1,160 @@
+{# 区域深度调研报告模板（用例 B） #}
+# 🏠 {{ requirement.city }}{% if requirement.district %} · {{ requirement.district }}{% endif %} · 年轻人租房调研 — {{ generated_date }}
+
+## 区域概览
+
+- **区域**：{{ requirement.city }}{% if requirement.district %} / {{ requirement.district }}{% endif %}{% if requirement.area %} / {{ requirement.area }}{% endif %}
+- **目标人群**：年轻租客（25-35 岁，独居/合租/情侣）
+- **关注维度**：配套、租金、居住口碑、安全
+- **Lifestyle 画像**：{{ requirement.lifestyle_profile | join('、') }}
+
+## Top {{ candidates | length }} 小区横向对比
+
+| # | 小区 | 综合分 | 70㎡两房 | 配套 | 口碑 | 安全 | 适合谁 |
+|---|------|-------|---------|------|-----|------|-------|
+{% for c in candidates -%}
+| {{ loop.index }} | [{{ c.community.name }}]({{ c.rental.url or '#' }}) | **{{ c.score.total }}** | {% if c.rental.by_room and c.rental.by_room.two_bedroom and c.rental.by_room.two_bedroom.avg %}{{ c.rental.by_room.two_bedroom.avg }}{% else %}— {% endif %} | {{ c.score.components.poi }} | {{ c.score.components.reputation }} | {{ c.score.components.safety }} | {{ c.recommended_for or '通用' }} |
+{% endfor %}
+
+{% for c in candidates %}
+---
+
+## {{ loop.index }}. {{ c.community.name }}
+
+{%- if c.community.built_year or c.community.property_company or c.community.unit_count %}
+
+### 📍 基础信息
+{%- if c.community.built_year %}
+- 建成年份：{{ c.community.built_year }} 年（房龄 {{ generated_year - c.community.built_year }} 年）
+{%- endif %}
+{%- if c.community.unit_count %}
+- 总户数：{{ c.community.unit_count }} 户
+{%- endif %}
+{%- if c.community.building_count %}
+- 楼栋数：{{ c.community.building_count }} 栋
+{%- endif %}
+{%- if c.community.property_company %}
+- 物业：{{ c.community.property_company }}
+{%- endif %}
+{%- endif %}
+
+### 🎯 配套盘点
+{% set categorized = c.poi_validation.poi_results -%}
+{%- set group_labels = {
+  'shopping': '🛒 购物',
+  'entertainment': '🎬 娱乐',
+  'dining': '🍜 餐饮',
+  'nature': '🌳 自然',
+  'transport': '🚇 通勤',
+  'medical': '🏥 医疗',
+  'life_service': '🐾 生活服务'
+} -%}
+{%- for top_cat, group_label in group_labels.items() %}
+{%- set group_keys = [] -%}
+{%- for cat in categorized.keys() %}{% if cat.startswith(top_cat + '.') %}{% set _ = group_keys.append(cat) %}{% endif %}{% endfor -%}
+{%- if group_keys %}
+- **{{ group_label }}**
+{%- for cat in group_keys %}
+{%- set spec = poi_specs_by_cat.get(cat) %}
+{%- set pois = categorized[cat] %}
+  - {{ spec.label if spec else cat }}：
+    {%- if pois %}
+    {%- for p in pois[:3] %}{{ p.name }}（{{ p.distance_m }}m）{% if not loop.last %} · {% endif %}{% endfor -%}
+    {%- if pois | length > 3 %} · ...等 {{ pois | length }} 家{% endif %}
+    {%- else %}—（未找到）
+    {%- endif %}
+{%- endfor %}
+{%- endif %}
+{%- endfor %}
+
+### 💰 租金水平
+{%- if c.rental.by_room %}
+
+| 户型 | 均价 | 区间 | 挂牌量 |
+|------|------|------|-------|
+{% if c.rental.by_room.one_bedroom and c.rental.by_room.one_bedroom.avg -%}
+| 一房一厅 | {{ c.rental.by_room.one_bedroom.avg }} | {{ c.rental.by_room.one_bedroom.min }}-{{ c.rental.by_room.one_bedroom.max }} | {{ c.rental.by_room.one_bedroom.count }} |
+{% endif -%}
+{% if c.rental.by_room.two_bedroom and c.rental.by_room.two_bedroom.avg -%}
+| 两房一厅 | {{ c.rental.by_room.two_bedroom.avg }} | {{ c.rental.by_room.two_bedroom.min }}-{{ c.rental.by_room.two_bedroom.max }} | {{ c.rental.by_room.two_bedroom.count }} |
+{% endif -%}
+{% if c.rental.by_room.three_bedroom and c.rental.by_room.three_bedroom.avg -%}
+| 三房 | {{ c.rental.by_room.three_bedroom.avg }} | {{ c.rental.by_room.three_bedroom.min }}-{{ c.rental.by_room.three_bedroom.max }} | {{ c.rental.by_room.three_bedroom.count }} |
+{% endif -%}
+{% if c.rental.by_room.shared_room and c.rental.by_room.shared_room.avg -%}
+| 合租主卧 | {{ c.rental.by_room.shared_room.avg }} | {{ c.rental.by_room.shared_room.min }}-{{ c.rental.by_room.shared_room.max }} | {{ c.rental.by_room.shared_room.count }} |
+{% endif -%}
+
+数据来源：[链家]({{ c.rental.url }})（共 {{ c.rental.total_listings or 0 }} 条挂牌）
+{%- else %}
+
+（无挂牌数据）
+{%- endif %}
+
+### 💬 居住口碑
+{%- if c.sentiment and c.sentiment.available and c.sentiment.total_notes %}
+（基于小红书 {{ c.sentiment.total_notes }} 篇笔记，按维度分组）
+{%- if c.sentiment.by_dimension %}
+
+| 维度 | 👍 正面 | 👎 负面 |
+|------|--------|--------|
+{% for dim, d in c.sentiment.by_dimension.items() -%}
+| {{ dim }} | {{ d.positive }} | {{ d.negative }} |
+{% endfor %}
+{%- endif %}
+
+{%- if c.sentiment.highlights %}
+
+**👍 亮点摘要**：
+{%- for n in c.sentiment.highlights[:3] %}
+- 「{{ n.title or (n.desc[:60] + '...') }}」 — per @{{ n.author }}（❤️{{ n.likes }}）[link]({{ n.url }})
+{%- endfor %}
+{%- endif %}
+{%- if c.sentiment.complaints %}
+
+**👎 槽点摘要**：
+{%- for n in c.sentiment.complaints[:3] %}
+- 「{{ n.title or (n.desc[:60] + '...') }}」 — per @{{ n.author }}（❤️{{ n.likes }}）[link]({{ n.url }})
+{%- endfor %}
+{%- endif %}
+{%- else %}
+
+（小红书数据不可用，跳过本节）
+{%- endif %}
+
+### ⚠️ 安全事件
+{{ c.safety.summary }}
+{%- if c.safety.incidents %}
+
+| 严重 | 事件 | 来源 |
+|------|------|------|
+{% for inc in c.safety.incidents[:8] -%}
+| {{ inc.severity | upper }} | {{ inc.title or inc.keyword }}{% if inc.snippet %} — {{ inc.snippet[:60] }}{% endif %} | [{{ inc.source }}]({{ inc.url }}) |
+{% endfor %}
+{%- endif %}
+
+> 注：「未查到不代表没有」。重要决策建议结合实地探访。
+
+{% endfor %}
+
+---
+
+## 按 lifestyle 推荐
+
+{%- for profile, top in lifestyle_recommendations.items() %}
+- **{{ profile }}**：{{ top.community.name }}（{{ top.score.total }} 分）— {{ top.recommended_reason or '配套契合度高' }}
+{%- endfor %}
+
+---
+
+## 📋 数据来源
+
+- **链家**：{{ requirement.city }} 租房 / 小区列表
+- **小红书**：xhs-skills（用户已登录的浏览器，共采集 {{ total_xhs_notes or 0 }} 篇笔记）
+- **百度地图 POI**：[lbsyun.baidu.com](https://lbsyun.baidu.com/)
+- **新闻搜索**：Bing 中国搜索
+
+---
+
+*报告生成时间：{{ generated_at }}*
+*免责声明：本报告基于公开数据采集，"未查到"不代表"未发生"。重要决策建议实地踏勘。*

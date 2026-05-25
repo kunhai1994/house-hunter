@@ -1,0 +1,49 @@
+# 评分权重 — 年轻租客视角
+# community_scorer 使用，可根据 lifestyle 动态调整
+
+# 主权重（5 个维度，加和 100）
+weights:
+  poi_match: 40       # 配套契合度（含 lifestyle 加权）
+  rental: 20          # 租金合理性
+  reputation: 20      # 居住口碑（小红书聚合）
+  safety: 15          # 安全
+  commute: 5          # 通勤（用户未指定目的地时此分匀给配套）
+
+# POI 满足度评分细则
+poi_match:
+  must_have_unsatisfied_penalty: 30      # 缺一个必备项扣 30 分
+  nice_to_have_bonus: 5                  # 满足一个 nice-to-have 加 5 分
+  distance_decay:                         # 距离越远扣分越多（按子类的 default_radius 归一化）
+    within_50_pct_radius: 1.0
+    within_100_pct_radius: 0.7
+    over_radius: 0.3
+
+# 租金评分细则
+rental:
+  budget_match_bonus: 100                # 完全在预算内
+  over_budget_10pct_penalty: 20          # 超预算 10% 内扣 20
+  over_budget_20pct_penalty: 50          # 超预算 20% 内扣 50
+  over_budget_above: 80                  # 超预算 20% 以上扣 80
+  district_avg_bonus: 10                 # 低于区均价加 10 分
+
+# 口碑评分细则（基于 xhs 笔记加权聚合）
+reputation:
+  positive_review_weight: 1.0
+  negative_review_weight: -1.5           # 负面权重大于正面（年轻人更怕踩坑）
+  min_notes_for_score: 5                 # 笔记数 < 5 时分数置为 50（中性）
+
+# 安全评分（满分 100，从 100 往下扣）
+safety:
+  high_severity_penalty: 30              # 凶案/命案/跳楼，每条扣 30
+  medium_severity_penalty: 12            # 入室/纠纷，每条扣 12
+  low_severity_penalty: 4                # 噪音/装修，每条扣 4
+  no_findings_floor: 80                  # 没查到任何事件 = 80 分（不是 100，因为"没查到≠没发生"）
+
+# 通勤评分（仅当用户提供 commute_destination 时启用）
+commute:
+  thresholds:
+    excellent: 30                        # ≤30 分钟 = 100 分
+    good: 45                             # ≤45 分钟 = 80 分
+    fair: 60                             # ≤60 分钟 = 60 分
+    poor: 90                             # ≤90 分钟 = 30 分
+    very_poor: 120                       # >120 分钟 = 0 分

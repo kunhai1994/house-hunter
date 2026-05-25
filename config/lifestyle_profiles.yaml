@@ -1,0 +1,122 @@
+# Lifestyle 画像配置 — 不同年轻租客对应不同的配套权重
+# Engine 根据 LLM 解析出的画像，调整配套类别的权重
+
+profiles:
+  default:
+    label: 平衡型（未指定画像）
+    description: 用户没明确表达偏好时，所有维度均权重
+    category_weights:
+      shopping: 1.0
+      entertainment: 1.0
+      dining: 1.0
+      nature: 1.0
+      transport: 1.0
+      medical: 1.0
+      life_service: 1.0
+
+  homebody:
+    label: 宅家党
+    description: 周末躺平、外卖、不爱出门
+    triggers: [宅, 宅家, 不爱出门, 躺平, 外卖, 在家, 居家]
+    category_weights:
+      shopping: 1.5            # 便利店、超市更重要
+      dining: 1.5              # 外卖密度
+      entertainment: 0.5       # 不爱出门
+      nature: 0.6
+      transport: 0.7
+      medical: 1.0
+      life_service: 1.2        # 上门服务、快递
+
+  nightlife:
+    label: 夜店党 / 夜生活动物
+    description: 重视酒吧、Live House、夜宵
+    triggers: [夜生活, 酒吧, 蹦迪, livehouse, 精酿, 夜宵, 夜店]
+    category_weights:
+      entertainment: 2.0       # 重点，且夜生活子类加权（在 lifestyle_matcher 处理）
+      dining: 1.3
+      transport: 1.5           # 打车、地铁末班
+      shopping: 0.8
+      nature: 0.5
+      medical: 0.8
+      life_service: 0.8
+
+  fitness:
+    label: 健身党
+    description: 健身房、跑步、运动
+    triggers: [健身, 运动, 跑步, 瑜伽, 撸铁, 训练]
+    category_weights:
+      entertainment: 1.5       # 健身房子类加权
+      nature: 1.8              # 公园/绿道
+      dining: 0.8
+      shopping: 0.9
+      transport: 1.0
+      medical: 1.0
+      life_service: 0.8
+
+  pet_owner:
+    label: 养宠党
+    description: 养猫养狗，需要宠物医院、宠物友好
+    triggers: [养宠, 宠物, 养猫, 养狗, 撸狗, 撸猫, 毛孩子]
+    category_weights:
+      life_service: 1.8        # 宠物医院子类加权
+      nature: 1.6              # 遛狗
+      shopping: 1.0
+      dining: 0.9
+      entertainment: 0.7
+      transport: 1.0
+      medical: 1.0
+
+  commuter:
+    label: 通勤党
+    description: 重视上班便利度，地铁刚需
+    triggers: [通勤, 上班, 离公司近, 地铁口, 地铁]
+    category_weights:
+      transport: 2.5           # 地铁子类加权重
+      dining: 1.2              # 早晨方便买早餐
+      shopping: 1.0
+      entertainment: 0.7
+      nature: 0.7
+      medical: 0.9
+      life_service: 0.9
+
+  shopping_lover:
+    label: 商场党
+    description: 周末逛商场、看电影、约会
+    triggers: [商场, 逛街, 购物, 约会, IMAX, 看电影, 万象城]
+    category_weights:
+      shopping: 2.0            # 购物中心子类加权
+      entertainment: 1.6       # 电影院子类加权
+      dining: 1.3
+      transport: 1.0
+      nature: 0.8
+      medical: 0.9
+      life_service: 0.9
+
+  budget_conscious:
+    label: 性价比党
+    description: 预算敏感，配套够用就行
+    triggers: [性价比, 便宜, 划算, 预算, 省钱]
+    category_weights:
+      shopping: 1.0            # 平价超市为主
+      dining: 1.0
+      transport: 1.5           # 通勤省时间
+      entertainment: 0.8
+      nature: 1.0
+      medical: 1.0
+      life_service: 1.0
+
+  single_woman:
+    label: 女生独居
+    description: 独居女性，重视安全、物业、夜路
+    triggers: [独居, 一个人住, 女生独居, 单身女, 安全, 治安]
+    category_weights:
+      transport: 1.4           # 地铁、晚归
+      shopping: 1.2            # 便利店、24h
+      medical: 1.1
+      entertainment: 0.9
+      dining: 1.0
+      nature: 0.8
+      life_service: 1.2
+    extra_emphasis:             # 在 community_scorer 中提升以下维度权重
+      safety: 1.5
+      reputation_keywords: [独居, 安全感, 物业, 保安, 门禁, 夜路]

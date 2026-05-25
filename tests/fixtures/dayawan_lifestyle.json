@@ -1,0 +1,19 @@
+{
+  "intent": "research",
+  "city": "惠州市",
+  "district": "大亚湾",
+  "lifestyle_profile": ["budget_conscious", "homebody"],
+  "must_have_pois": [
+    {"category": "shopping.shopping_mall", "min_count": 1, "radius_m": 5000},
+    {"category": "medical.hospital", "min_count": 2, "radius_m": 5000}
+  ],
+  "nice_to_have_pois": [
+    {"category": "shopping.big_supermarket", "min_count": 1, "radius_m": 3000},
+    {"category": "nature.park", "min_count": 1, "radius_m": 3000},
+    {"category": "dining.chain_restaurant", "min_count": 5, "radius_m": 1500},
+    {"category": "transport.bus_stop", "min_count": 1, "radius_m": 1000},
+    {"category": "entertainment.cinema", "min_count": 1, "radius_m": 5000}
+  ],
+  "top_n": 5,
+  "raw": "我想了解惠州大亚湾适合年轻人租房的小区，重点看配套、租金、居住口碑、安全事件"
+}

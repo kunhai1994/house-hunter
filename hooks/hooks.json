@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT:-${OPENCLAW_SKILL_ROOT:-$HOME/workspace/tools/house-hunter}}/hooks/scripts/session_start.py\""
+          }
+        ]
+      }
+    ]
+  }
+}

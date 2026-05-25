@@ -1,0 +1,42 @@
+# Python
+todo
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.venv/
+venv/
+
+# Cache
+scripts/cache/
+*.cache.json
+
+# IDE
+.idea/
+.vscode/
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Local secrets / config overrides
+config/mcp_servers.local.json
+.env
+*.env
+ke_open.env
+
+# Chrome extension packaging (don't commit signed extension)
+*.pem
+*.crx
+
+# Report raw data (defensive — reports save to ~/Documents/)
+*-raw.json
+
+# Backup / temp files
+*.bak
+*.orig
+*.swp
+
+# Claude Code 内部状态（autonomous loop heartbeat lock 等）
+.claude/scheduled_tasks.lock

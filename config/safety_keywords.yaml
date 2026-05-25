@@ -1,0 +1,62 @@
+# 安全风险关键词库
+# safety_checker 用以下关键词组合 "{小区名} {keyword}" 检索 xhs + WebSearch
+
+categories:
+  violence:
+    label: 暴力刑事案件
+    severity: high
+    keywords: [凶案, 命案, 砍人, 抢劫, 持刀, 杀人, 强奸, 强暴, 伤人, 投毒]
+
+  extreme_event:
+    label: 跳楼/自杀
+    severity: high
+    keywords: [跳楼, 自杀, 坠楼, 坠亡, 跳下, 寻短见]
+
+  disaster:
+    label: 灾害事件
+    severity: medium
+    keywords: [火灾, 起火, 爆炸, 水淹, 内涝, 漏水严重, 燃气泄漏]
+
+  intrusion:
+    label: 入侵/治安
+    severity: medium
+    keywords: [入室, 入室盗窃, 小偷, 盗窃, 入侵, 摸进来]
+
+  harassment:
+    label: 骚扰/独居安全
+    severity: medium
+    keywords: [尾随, 偷窥, 跟踪, 性骚扰, 偷拍]
+
+  dispute:
+    label: 业主/物业纠纷
+    severity: low
+    keywords: [业主维权, 物业纠纷, 物业打人, 邻居打架, 邻居纠纷, 扰民, 高空抛物, 装修纠纷]
+
+  noise:
+    label: 噪音问题
+    severity: low
+    keywords: [噪音扰民, 半夜吵, 装修噪音, 楼上吵, 隔音差]
+
+  scam:
+    label: 诈骗/物业问题
+    severity: low
+    keywords: [中介诈骗, 二房东跑路, 押金不退, 黑中介]
+
+# 时间衰减：年代久远的事件降权
+time_decay:
+  full_weight_within_days: 365     # 一年内事件全权重
+  half_weight_after_days: 1095     # 三年后权重减半
+  ignore_after_days: 1825          # 五年以上忽略（除非是凶案/命案 high 等级）
+
+# 单条事件可信度判断（避免被蹭热度笔记误导）
+credibility_signals:
+  positive:                         # 增加可信度
+    - 新闻链接
+    - 多人评论附议
+    - 配图/视频
+    - 时间地点明确
+  negative:                         # 降低可信度
+    - 标题党
+    - 单条孤立笔记
+    - 没有时间地点
+    - 明显引流

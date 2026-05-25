@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Housing Bridge (house-hunter)",
+  "version": "1.0.0",
+  "description": "house-hunter 配套扩展：让 skill 通过你已登录的 Chrome 抓 lianjia / ke / 自如 / 安居客 / 58 / 房天下 数据",
+  "permissions": ["alarms", "cookies"],
+  "host_permissions": [
+    "*://*.lianjia.com/*",
+    "*://*.ke.com/*",
+    "*://*.ziroom.com/*",
+    "*://*.anjuke.com/*",
+    "*://*.58.com/*",
+    "*://*.fang.com/*",
+    "http://localhost:9334/*",
+    "http://127.0.0.1:9334/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Housing Bridge"
+  }
+}

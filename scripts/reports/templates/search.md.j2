@@ -1,0 +1,132 @@
+{# 找房报告模板（用例 A） #}
+# 🏠 {{ requirement.city }}{{ requirement.district or '' }}租房报告 — {{ generated_date }}
+
+## 你的需求
+
+- **区域**：{{ requirement.city }}{% if requirement.district %} / {{ requirement.district }}{% endif %}{% if requirement.area %} / {{ requirement.area }}{% endif %}
+- **户型/面积**：{% if requirement.rooms %}{{ requirement.rooms }}房{% if requirement.halls %}{{ requirement.halls }}厅{% endif %}{% else %}未指定{% endif %}{% if requirement.area_min_sqm %}，{{ requirement.area_min_sqm }}-{{ requirement.area_max_sqm or requirement.area_min_sqm }} ㎡{% endif %}
+- **预算**：{% if requirement.budget.max_per_month %}≤ {{ requirement.budget.max_per_month }} 元/月（{{ requirement.budget.type or 'rent' }}）{% else %}未限定{% endif %}
+- **Lifestyle 画像**：{{ requirement.lifestyle_profile | join('、') }}
+{%- if requirement.must_have_pois %}
+- **必备配套**（must-have）：
+{%- for spec in requirement.must_have_pois %}
+  - {{ spec.label }}（半径 {{ spec.radius_m }}m，至少 {{ spec.min_count }} 家{% if spec.must_have_brand %}，需含 {{ spec.must_have_brand | join('/') }}{% endif %}）
+{%- endfor %}
+{%- endif %}
+{%- if requirement.nice_to_have_pois %}
+- **加分配套**（nice-to-have）：
+{%- for spec in requirement.nice_to_have_pois %}
+  - {{ spec.label }}（半径 {{ spec.radius_m }}m）
+{%- endfor %}
+{%- endif %}
+
+## 候选小区评分（Top {{ candidates | length }}）
+
+| 排名 | 小区 | 综合分 | 配套 | 租金 | 口碑 | 安全 |
+|------|------|-------|------|------|------|------|
+{% for c in candidates -%}
+| {{ loop.index }} | [{{ c.community.name }}]({{ c.rental.url or c.community.url or '#' }}) | **{{ c.score.total }}** | {{ c.score.components.poi }} | {{ c.score.components.rental }} | {{ c.score.components.reputation }} | {{ c.score.components.safety }} |
+{% endfor %}
+
+{% for c in candidates %}
+---
+
+## 🥇 Top {{ loop.index }}: {{ c.community.name }}
+
+### 📍 基础
+- **位置**：{{ c.community.district or '' }}{% if c.community.address %} · {{ c.community.address }}{% endif %}
+{%- if c.community.built_year %}
+- **建成年份**：{{ c.community.built_year }} 年（房龄 {{ generated_year - c.community.built_year }} 年）
+{%- endif %}
+{%- if c.community.property_company %}
+- **物业**：{{ c.community.property_company }}
+{%- endif %}
+{%- if c.rental.by_room %}
+{%- set room_data = c.rental.by_room.get(c.score.matched_room_key or 'two_bedroom') %}
+{%- if room_data and room_data.avg %}
+- **目标户型租金**：{{ room_data.min }} – {{ room_data.max }}（均价 {{ room_data.avg }}）{% if c.score.rental_note %} · {{ c.score.rental_note }}{% endif %}
+{%- endif %}
+{%- endif %}
+
+### 🎯 配套契合
+{%- for cat, pois in c.poi_validation.poi_results.items() %}
+{%- set spec = poi_specs_by_cat.get(cat) %}
+- **{{ spec.label if spec else cat }}**（半径 {{ spec.radius_m if spec else '?' }}m）
+  {%- if pois %}
+  {%- for p in pois[:3] %}
+  - {{ p.name }} — {{ p.distance_m }} m{% if p.matched_brand %} 🏷️ {{ p.matched_brand | join(',') }}{% endif %}
+  {%- endfor %}
+  {%- if pois | length > 3 %}
+  - ...还有 {{ pois | length - 3 }} 家
+  {%- endif %}
+  {%- else %}
+  - ⚠️ 未找到符合条件的 POI
+  {%- endif %}
+{%- endfor %}
+
+{%- if c.score.missing_must_have %}
+
+⚠️ **缺失必备项**：{{ c.score.missing_must_have | join('、') }}
+{%- endif %}
+
+### 💬 居住口碑
+{%- if c.sentiment and c.sentiment.available and c.sentiment.total_notes %}
+（基于小红书 {{ c.sentiment.total_notes }} 篇笔记）
+{%- if c.sentiment.highlights %}
+
+**👍 亮点**：
+{%- for n in c.sentiment.highlights[:3] %}
+- 「{{ n.title or n.desc[:60] }}」 — per @{{ n.author }}（❤️{{ n.likes }}）[link]({{ n.url }})
+{%- endfor %}
+{%- endif %}
+{%- if c.sentiment.complaints %}
+
+**👎 槽点**：
+{%- for n in c.sentiment.complaints[:3] %}
+- 「{{ n.title or n.desc[:60] }}」 — per @{{ n.author }}（❤️{{ n.likes }}）[link]({{ n.url }})
+{%- endfor %}
+{%- endif %}
+{%- else %}
+（小红书数据不可用，跳过本节）
+{%- endif %}
+
+### ⚠️ 安全
+{{ c.safety.summary }}
+{%- if c.safety.incidents %}
+{%- for inc in c.safety.incidents[:5] %}
+- **[{{ inc.severity | upper }}] {{ inc.keyword }}**：{{ inc.title }}{% if inc.snippet %} — {{ inc.snippet[:80] }}{% endif %} [{{ inc.source }}]({{ inc.url }})
+{%- endfor %}
+{%- if c.safety.incidents | length > 5 %}
+- ...还有 {{ c.safety.incidents | length - 5 }} 条
+{%- endif %}
+{%- endif %}
+
+> 注：「未查到不代表没有」。重要决策建议结合实地探访。
+
+{% endfor %}
+
+{% if compromises %}
+---
+
+## 🤔 不完全满足但接近的（妥协方案）
+
+{% for c in compromises %}
+- **{{ c.community.name }}**（综合分 {{ c.score.total }}）：缺少 {{ c.score.missing_must_have | join('、') }}，但 {{ c.compromise_note or '其他维度评分高' }}
+{% endfor %}
+{% endif %}
+
+---
+
+## 📋 数据来源
+
+- **候选小区**：{{ candidate_source_label }}（{{ candidates | length }} 个 Top）
+- **小区元数据**（建成年份/物业/户数/地址）：各 adapter 详情页（贝壳/链家/安居客等）
+- **挂牌租金**：链家/贝壳 zufang 页（同一份数据）
+- **POI 配套**：百度地图 / 高德地图 / 天地图（三层 fallback）
+- **小红书口碑**：xhs-skills（用户已登录浏览器，{{ total_xhs_notes or 0 }} 篇笔记）
+- **安全事件**：Bing 中国搜索（新闻） + 小红书风险词检索
+
+---
+
+*报告生成时间：{{ generated_at }}*
+*免责声明：本报告基于公开数据采集，"未查到"不代表"未发生"。重要决策建议实地踏勘。*

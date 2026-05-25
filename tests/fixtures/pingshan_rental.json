@@ -1,0 +1,32 @@
+{
+  "intent": "search",
+  "city": "深圳市",
+  "district": "坪山区",
+  "rooms": 2,
+  "halls": 1,
+  "area_min_sqm": 65,
+  "area_max_sqm": 75,
+  "budget": {"type": "rent", "max_per_month": 4000},
+  "lifestyle_profile": ["shopping_lover"],
+  "must_have_pois": [
+    {
+      "category": "shopping.big_supermarket",
+      "match_keywords": ["山姆", "沃尔玛"],
+      "min_count": 1,
+      "radius_m": 3000
+    },
+    {"category": "shopping.shopping_mall", "min_count": 1, "radius_m": 3000},
+    {
+      "category": "entertainment.cinema",
+      "must_have_brand": ["IMAX"],
+      "min_count": 1,
+      "radius_m": 5000
+    },
+    {"category": "medical.hospital", "min_count": 3, "radius_m": 3000}
+  ],
+  "nice_to_have_pois": [
+    {"category": "transport.subway", "min_count": 1, "radius_m": 1000}
+  ],
+  "top_n": 5,
+  "raw": "我想在坪山区找个 70 平 2 房 1 厅，附近 3 公里有山姆或沃尔玛，要有商场，还要有 IMAX 影院，3 家医院，预算 4000"
+}

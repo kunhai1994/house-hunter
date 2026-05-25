@@ -1,0 +1,23 @@
+{
+  "_comment": "把这份配置合并到 ~/.claude/settings.json 的 mcpServers 字段；填入真实 API Key 后重启 Claude Code 生效",
+  "mcpServers": {
+    "baidu-maps": {
+      "_purpose": "百度地图 MCP — POI 搜索、路线、地理编码（中国大陆首选）",
+      "_apply_at": "https://lbsyun.baidu.com/apiconsole/key (类型选: 服务端)",
+      "command": "python",
+      "args": ["-m", "mcp_server_baidu_maps"],
+      "env": {
+        "BAIDU_MAPS_API_KEY": "<在此填入百度地图 AK>"
+      }
+    },
+    "amap": {
+      "_purpose": "高德地图 MCP — 备用地图源 + 地址直接路由",
+      "_apply_at": "https://lbs.amap.com/api/webservice/create-project-and-key (类型选: Web服务)",
+      "command": "uvx",
+      "args": ["amap-mcp-server"],
+      "env": {
+        "AMAP_MAPS_API_KEY": "<在此填入高德 Key>"
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Housing Bridge</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+         width: 320px; padding: 12px; margin: 0; }
+  h1 { font-size: 14px; margin: 0 0 8px; color: #2c3e50; }
+  .row { display: flex; justify-content: space-between; padding: 4px 0;
+         border-bottom: 1px solid #eee; font-size: 12px; }
+  .row:last-child { border-bottom: 0; }
+  .label { color: #555; }
+  .value { font-family: ui-monospace, Menlo, monospace; }
+  .ok { color: #16a34a; }
+  .nope { color: #94a3b8; }
+  .err { color: #dc2626; }
+  .footer { margin-top: 8px; font-size: 11px; color: #888;
+            border-top: 1px solid #eee; padding-top: 6px; }
+  button { width: 100%; padding: 6px; margin-top: 6px;
+           background: #2c3e50; color: white; border: 0;
+           border-radius: 4px; cursor: pointer; font-size: 12px; }
+</style>
+</head>
+<body>
+  <h1>🏠 Housing Bridge</h1>
+  <div id="status">
+    <div class="row"><span class="label">Bridge URL</span><span class="value" id="bridge">—</span></div>
+    <div class="row"><span class="label">Ext ID</span><span class="value" id="ext_id">—</span></div>
+    <div class="row"><span class="label">已登录站点</span><span class="value" id="logins">—</span></div>
+    <div class="row"><span class="label">最近 fetch</span><span class="value" id="last">—</span></div>
+    <div class="row"><span class="label">错误连击</span><span class="value" id="errors">—</span></div>
+  </div>
+  <button id="refresh">刷新</button>
+  <div class="footer">配套 skill: house-hunter。请前台启动 housing_bridge_server.py。</div>
+<script src="popup.js"></script>
+</body>
+</html>
